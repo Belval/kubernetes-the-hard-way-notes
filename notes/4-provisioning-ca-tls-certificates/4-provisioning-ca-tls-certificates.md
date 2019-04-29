@@ -1,0 +1,30 @@
+# Provisioning a CA AND Generating TLS Certificates
+
+- Generate a Certificate Authority
+    - A CA is an entity that can issue certificates. In the context of Kubernetes, certificates are generated for
+        - [kube-apiserver](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)
+            - Validates and configures data for the API objects
+            - Provides a REST frontend for the cluster's shared state through which all other components interact
+        - [kube-controller-manager](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/)
+            - Daemon with the core control loop that watches the shared state through apiserver and makes changes to move the current state towards the desired state. (TODO, whatever that means)
+        - [kube-scheduler](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/)
+            - TODO
+        - [kubelet](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/)
+            - Node agent that runs on each node
+        - [kube-proxy](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/)
+            - TODO
+    - Requires a config, `ca-config.json`
+    - Requires a certificate config, `ca-csr.json`
+        - `csr` stands for [Certificate signing request](https://en.wikipedia.org/wiki/Certificate_signing_request)
+    - The `cfssl` tool makes it easy to create the `.pem` files
+        - `cfssl gencert -initca ca-csr.json | cfssljson -bare ca`
+- Admin certificate
+    - Same as above, see `admin-csr.json`
+- Client certificates
+    - Bit trickier, as we want one certificate for each instance
+    - See `generate_workers_certs.sh`
+- `kube-controller-manager` client certificate
+- `kube-proxy`
+- `kube-scheduler`
+- Kubernetes API Server certs
+- Service account
