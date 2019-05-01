@@ -1,5 +1,9 @@
 cp -r ../4-provisioning-ca-tls-certificates/certs/ .
 
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+  --region $(gcloud config get-value compute/region) \
+  --format 'value(address)')
+
 # Workers
 echo "Workers"
 {
